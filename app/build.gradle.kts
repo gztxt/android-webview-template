@@ -6,6 +6,11 @@ android {
     namespace = "com.gztxt.webviewapp"
     compileSdk = 35
 
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
     defaultConfig {
         applicationId = "com.gztxt.webviewapp"
         minSdk = 24

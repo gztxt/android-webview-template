@@ -29,4 +29,13 @@ android {
 dependencies {
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("androidx.webkit:webkit:1.12.1")
+
+    constraints {
+        implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.24") {
+            because("Force unified Kotlin version to avoid duplicate class conflicts")
+        }
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.24") {
+            because("Force unified Kotlin version")
+        }
+    }
 }

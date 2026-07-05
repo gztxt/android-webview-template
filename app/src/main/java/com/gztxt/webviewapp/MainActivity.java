@@ -17,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    // ⚠️ 打包其他项目时只需改这里
     private static final String APP_URL = "http://fnos.gztxt.asia:5001";
 
     private WebView webView;
@@ -61,10 +60,10 @@ public class MainActivity extends AppCompatActivity {
                 DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
                 request.setMimeType(mimetype);
                 request.addRequestHeader("User-Agent", userAgent);
-                request.setDescription("下载文件中...");
-                String fileName = "安防维保管理系统.pdf";
+                request.setDescription("Downloading file...");
+                String fileName = "Security-Maintenance.pdf";
                 if (contentDisposition != null && contentDisposition.contains("filename=")) {
-fileName = contentDisposition.split("filename=")[1].replace(, "").trim();
+                    fileName = contentDisposition.substring(contentDisposition.indexOf("filename=") + 9).replace("\"", "").trim();
                 }
                 request.setTitle(fileName);
                 request.allowScanningByMediaScanner();

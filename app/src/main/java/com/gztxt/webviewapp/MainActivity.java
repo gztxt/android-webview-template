@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
 
     // ⚠️ 打包其他项目时只需改这里
-    private static final String APP_URL = "http://192.168.5.102:5001";
+    private static final String APP_URL = "http://fnos.gztxt.asia:5001";
 
     private WebView webView;
 

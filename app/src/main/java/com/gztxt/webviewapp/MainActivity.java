@@ -1,21 +1,19 @@
 package com.gztxt.webviewapp;
 
-import android.Manifest;
 import android.app.DownloadManager;
 import android.content.Context;
-import android.content.pm.PackageManager;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.webkit.DownloadListener;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebSettings;
-import android.webkit.ValueCallback;
-import android.webkit.DownloadListener;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.core.app.ActivityCompat;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
         settings.setAllowFileAccess(true);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 
-        // 显示文件选择器（拍照/选取照片）
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onShowFileChooser(WebView view, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
@@ -47,12 +44,6 @@ public class MainActivity extends AppCompatActivity {
                     mFilePathCallback.onReceiveValue(null);
                 }
                 mFilePathCallback = filePathCallback;
-
-                // 请求存储权限（Android 6+）
-                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_FILE_CHOOSER);
-                }
-
                 Intent intent = fileChooserParams.createIntent();
                 try {
                     startActivityForResult(intent, REQUEST_FILE_CHOOSER);
@@ -64,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // 处理文件下载
         webView.setDownloadListener(new DownloadListener() {
             @Override
             public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
@@ -72,10 +62,14 @@ public class MainActivity extends AppCompatActivity {
                 request.setMimeType(mimetype);
                 request.addRequestHeader("User-Agent", userAgent);
                 request.setDescription("下载文件中...");
-                request.setTitle(contentDisposition.replace("attachment; filename=", ""));
+                String fileName = "安防维保管理系统.pdf";
+                if (contentDisposition != null && contentDisposition.contains("filename=")) {
+                    fileName = contentDisposition.split("filename=")[1].replace(""", "").trim();
+                }
+                request.setTitle(fileName);
                 request.allowScanningByMediaScanner();
                 request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, contentDisposition.replace("attachment; filename=", ""));
+                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
                 DownloadManager dm = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
                 dm.enqueue(request);
             }

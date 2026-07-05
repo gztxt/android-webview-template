@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 request.setDescription("下载文件中...");
                 String fileName = "安防维保管理系统.pdf";
                 if (contentDisposition != null && contentDisposition.contains("filename=")) {
-                    fileName = contentDisposition.split("filename=")[1].replace(""", "").trim();
+fileName = contentDisposition.split("filename=")[1].replace(, "").trim();
                 }
                 request.setTitle(fileName);
                 request.allowScanningByMediaScanner();
